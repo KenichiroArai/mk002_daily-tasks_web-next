@@ -14,7 +14,7 @@
 | [daily-tasks-git](https://github.com/KenichiroArai/daily-tasks-git)             | 基軸。Issue、ワークフロー、データ（`docs/data/`）                                                                                 |
 | [gr002_daily-tasks](https://github.com/KenichiroArai/gr002_daily-tasks)         | 収集ツール（Java）                                                                                                                |
 | mk002_daily-tasks_web-next（本リポジトリ）                                      | 画面                                                                                                                              |
-| [kb002_daily-tasks_doc](https://github.com/KenichiroArai/kb002_daily-tasks_doc) | 設計書（[docs/design.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/design.md)）と横断的なドキュメント |
+| [kb002_daily-tasks_doc](https://github.com/KenichiroArai/kb002_daily-tasks_doc) | 設計書（[画面](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/design/frontend.md)、[収集ツール](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/design/backend.md)）と横断的なドキュメント |
 
 ## ローカルでの実行
 

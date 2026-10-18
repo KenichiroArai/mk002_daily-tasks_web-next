@@ -72,10 +72,10 @@ src/
 
 ## 設計書
 
-- 画面の設計書は kb002_daily-tasks_doc の `docs/` に Markdown で記載する。入口は [docs/design.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/design.md)、各章は `docs/design/` に置く
+- 画面の設計書は kb002_daily-tasks_doc の `docs/design/frontend.md` と `docs/design/frontend/` に Markdown で記載する。設計書全体の入口は [docs/design.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/design.md)、画面の目次は [docs/design/frontend.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/design/frontend.md) である。収集ツールの設計書は `docs/design/backend.md` に分けて置く
 - 設計書は本リポジトリの `src/` の現状の実装を正として記述する
-- 本リポジトリのコード（`src/`、`scripts/`、設定ファイル）を変更する場合は、設計書をすべて見直し、実装と食い違う箇所を更新する
-- 新しい機能や画面を追加した場合は、設計書に章または節を追加し、`design.md` の目次も更新する
+- 本リポジトリのコード（`src/`、`scripts/`、設定ファイル）を変更する場合は、フロントエンド設計書をすべて見直し、実装と食い違う箇所を更新する
+- 新しい機能や画面を追加した場合は、フロントエンド設計書に章または節を追加し、`docs/design/frontend.md` の目次も更新する
 
 ## TypeScript のコーディングルール
 
