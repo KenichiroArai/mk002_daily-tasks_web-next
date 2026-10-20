@@ -30,7 +30,7 @@ Cursor / Codex / Claude Code など複数ツールで共通利用する。
 
 ## 構成ルール
 
-Java 側（gr002_daily-tasks）の「機能パッケージ + 層」に合わせ、`src/` も機能（feature）単位で構成する。
+Java 側（gr002_daily-tasks）の「機能パッケージ + 層」に合わせ、`src/` も機能（feature）単位で構成する。モジュールの分け方は、kb002_daily-tasks_doc の [docs/coding-rules.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/coding-rules.md) の「役割」に従う。
 
 ```text
 scripts/copy-data.mjs        # daily-tasks-git の docs/data を public/data にコピー（dev / build の前に自動実行）
