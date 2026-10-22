@@ -1,12 +1,12 @@
 import { Panel, Swatch } from '@/shared/components/ui';
 
-import { formatMetric, roundMetric, type RankingRow } from '../../lib';
+import { formatMetric, roundMetric, type ItemColors, type RankingRow } from '../../lib';
 import type { Metric } from '../../model';
 import styles from './RankingTable.module.css';
 
 type RankingTableProps = {
   rows: readonly RankingRow[];
-  colors: Readonly<Record<string, string>>;
+  colors: Readonly<ItemColors>;
   metric: Metric;
 };
 

@@ -79,6 +79,18 @@ src/
 
 ## TypeScript のコーディングルール
 
+### 対応（Map / Record）
+
+共通ルールは kb002_daily-tasks_doc の [docs/coding-rules.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/coding-rules.md) の「対応」に従う。
+
+- 公開する対応には型エイリアスを付ける。クラスにはしない
+- 中身の `Map` や `Record` は、JSON の動的キー、関数内の一時集計、モジュール内のラベル索引なら理由をコメントして残してよい
+
+```ts
+/** 項目名と色の対応。項目名は可変なので Record のままにする。 */
+export type ItemColors = Record<string, string>;
+```
+
 ### 関数の戻り値
 
 kb002_daily-tasks_doc の [docs/coding-rules.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/coding-rules.md) の「戻り値」を TypeScript にも適用する。

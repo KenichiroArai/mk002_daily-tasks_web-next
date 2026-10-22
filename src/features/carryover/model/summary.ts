@@ -32,5 +32,12 @@ export const summarySchema = z.object({
 });
 
 export type Stat = z.infer<typeof statSchema>;
+
+/**
+ * 項目名または月（yyyy-MM）と集計値の対応。
+ * JSON の動的キーなので、中身は Record のままにする。
+ */
+export type ItemStats = Record<string, Stat>;
+
 export type Day = z.infer<typeof daySchema>;
 export type Summary = z.infer<typeof summarySchema>;

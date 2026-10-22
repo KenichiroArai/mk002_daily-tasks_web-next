@@ -2,11 +2,13 @@
 
 import { Button, Panel, Swatch } from '@/shared/components/ui';
 
+import type { ItemColors } from '../../lib';
+
 import styles from './ItemSelector.module.css';
 
 type ItemSelectorProps = {
   items: readonly string[];
-  colors: Readonly<Record<string, string>>;
+  colors: Readonly<ItemColors>;
   selected: ReadonlySet<string>;
   onToggle: (item: string) => void;
   onSelectAll: () => void;

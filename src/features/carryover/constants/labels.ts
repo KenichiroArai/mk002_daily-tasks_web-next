@@ -1,5 +1,9 @@
 import type { Agg, Metric, Target, View } from '../model';
 
+/**
+ * 画面のラベル。列挙値から表示名を引くモジュール内の索引なので Record のままにする。
+ */
+
 export const VIEW_LABELS: Record<View, string> = {
   daily: '日別推移（全体）',
   dailyItem: '日別推移（項目ごと）',

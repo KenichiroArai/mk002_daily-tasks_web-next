@@ -1,4 +1,4 @@
-import type { Day, Stat, Summary } from '../model';
+import type { Day, ItemStats, Stat, Summary } from '../model';
 
 /**
  * テスト用の集計値を作る。
@@ -14,8 +14,8 @@ export function stat(count: number, minutes: number, checkedCount = 0, checkedMi
 export function day(
   date: string,
   issue: number,
-  byItem: Record<string, Stat>,
-  byOriginMonth: Record<string, Stat> = {},
+  byItem: ItemStats,
+  byOriginMonth: ItemStats = {},
 ): Day {
   const total = Object.values(byItem).reduce(
     (acc, s) =>

@@ -11,6 +11,7 @@ export {
   roundMetric,
   statValue,
 } from './calc';
+export type { DaysByMonth, ItemColors } from './calc';
 export { buildChartSpec } from './chartData';
 export type { ChartRow, ChartSeries, ChartSpec } from './chartData';
 export { buildChartNote, buildChartTitle } from './chartText';

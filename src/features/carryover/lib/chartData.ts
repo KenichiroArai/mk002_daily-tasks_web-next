@@ -1,6 +1,7 @@
 import { AGG_LABELS, METRIC_LABELS, ORIGIN_MONTH_COLOR, PRIMARY_COLOR } from '../constants';
 import type { DashboardOptions, Day } from '../model';
 import { aggregate, dayItemValue, dayTotal, groupByMonth, roundMetric, statValue } from './calc';
+import type { ItemColors } from './calc';
 
 /**
  * グラフの系列。Recharts の dataKey は「.」をパスとして扱うため、項目名ではなく連番のキーを使う。
@@ -34,7 +35,7 @@ export type ChartSpec = {
 type BuildContext = {
   days: readonly Day[];
   items: readonly string[];
-  colors: Readonly<Record<string, string>>;
+  colors: Readonly<ItemColors>;
   options: DashboardOptions;
 };
 
@@ -185,7 +186,7 @@ const BUILDERS: Record<DashboardOptions['view'], (context: BuildContext) => Char
 export function buildChartSpec(
   days: readonly Day[],
   items: readonly string[],
-  colors: Readonly<Record<string, string>>,
+  colors: Readonly<ItemColors>,
   options: DashboardOptions,
 ): ChartSpec {
   const result = BUILDERS[options.view]({ days, items, colors, options });

@@ -4,6 +4,18 @@ import { PALETTE, UNIT_LABELS } from '../constants';
 import type { Agg, Day, Metric, Stat, Target } from '../model';
 
 /**
+ * 月（YYYY-MM）ごとの日別データ。
+ * 月で引く対応の名前。中身は Map のままにする。
+ */
+export type DaysByMonth = Map<string, Day[]>;
+
+/**
+ * 項目名と色の対応。
+ * 項目名は可変なので Record のままにする。
+ */
+export type ItemColors = Record<string, string>;
+
+/**
  * 集計値から、指標と対象に応じた値を取り出す。
  */
 export function statValue(stat: Stat | undefined, metric: Metric, target: Target): number {
@@ -98,8 +110,9 @@ export function formatMetricWithUnit(value: number, metric: Metric): string {
 /**
  * 日別のデータを月（YYYY-MM）ごとにまとめる。
  */
-export function groupByMonth(days: readonly Day[]): Map<string, Day[]> {
-  const result = new Map<string, Day[]>();
+export function groupByMonth(days: readonly Day[]): DaysByMonth {
+  // 月（YYYY-MM）で引く関数内の一時集計。戻り値の型が名前を持つ。
+  const result: DaysByMonth = new Map<string, Day[]>();
   for (const day of days) {
     const key = day.date.slice(0, 7);
     const list = result.get(key);
@@ -123,8 +136,9 @@ export function filterDays(days: readonly Day[], from: string, to: string): Day[
 /**
  * 項目の並び順に色を割り当てる。
  */
-export function assignColors(items: readonly string[]): Record<string, string> {
-  const result: Record<string, string> = {};
+export function assignColors(items: readonly string[]): ItemColors {
+  // 項目名は可変なので Record のままにする。
+  const result: ItemColors = {};
   items.forEach((item, index) => {
     result[item] = PALETTE[index % PALETTE.length] ?? PALETTE[0];
   });
