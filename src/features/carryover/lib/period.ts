@@ -30,6 +30,7 @@ export function presetPeriod(days: readonly Day[], presetDays: number): Period {
   }
   const from = new Date(`${last.date}T00:00:00Z`);
   from.setUTCDate(from.getUTCDate() - (presetDays - 1));
-  result = { from: from.toISOString().slice(0, 10), to: last.date };
+  const fromIso = from.toISOString();
+  result = { from: fromIso.slice(0, 10), to: last.date };
   return result;
 }

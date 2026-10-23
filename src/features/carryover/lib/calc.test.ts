@@ -123,7 +123,8 @@ describe('filterDays', () => {
   const days = sampleSummary().days;
 
   it('期間の両端を含めて絞り込む', () => {
-    expect(filterDays(days, '2026-01-31', '2026-02-01').map((d) => d.issue)).toEqual([2, 3]);
+    const filtered = filterDays(days, '2026-01-31', '2026-02-01');
+    expect(filtered.map((d) => d.issue)).toEqual([2, 3]);
   });
 
   it('空文字は制限なしとする', () => {

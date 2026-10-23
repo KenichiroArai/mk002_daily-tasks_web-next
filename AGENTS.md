@@ -97,6 +97,7 @@ kb002_daily-tasks_doc の [docs/coding-rules.md](https://github.com/KenichiroAra
 
 - if、else if、else の直前に、何を判定するかを `/* コメント */` で書く。分岐の中では、先に判定結果（`// 〜の場合`）、続けて処理内容（`// 〜する`）を書く
 - 条件がメソッド呼び出し、または比較の片側がメソッドの戻り値のときは、その戻り値を判定の直前の変数へ入れる。変数やフィールドの直接比較、`instanceof`、変数だけの複合条件は切り出さない
+- メソッドの戻り値を、そのまま次のメソッドの呼び出し先にしない。いったん変数に受ける。配列の `map` / `filter` / `join` / `reduce`、`Promise.then`、zod のスキーマ連鎖、テストの `expect(...).toBe()` や Testing Library のマッチャーは定型として残してよい
 
 - 対象: `function` 宣言と、本体が `{ }` のアロー関数（`lib/`・`hooks/`・`api/`・reducer・テスト用の関数、`scripts/` を含む）
   - 関数の戻り値は変数 `result` で定義する
