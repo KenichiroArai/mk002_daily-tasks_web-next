@@ -25,7 +25,11 @@ type ChartTooltipProps = {
  * 値の大きい順に系列を並べるツールチップ。積み上げ表示で 2 系列以上ある場合は合計も表示する。
  */
 export function ChartTooltip({ active, label, entries, metric, stacked }: ChartTooltipProps) {
+  /* ツールチップを表示するか */
   if (!active || entries.length === 0) {
+    // 表示しない場合
+
+    // 何も描かない
     return null;
   }
   const sorted = [...entries]

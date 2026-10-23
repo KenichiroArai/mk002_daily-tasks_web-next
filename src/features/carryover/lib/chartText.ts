@@ -15,10 +15,21 @@ export function buildChartTitle(options: DashboardOptions): string {
  */
 export function buildChartNote(options: DashboardOptions): string {
   const notes: string[] = [];
+  /* 持ち越し元の月ごとか */
   if (options.view === 'originMonth') {
+    // 持ち越し元の月ごとの場合
+
+    // 全項目が対象であることを補足する
     notes.push('持ち越し元の月ごとの表示は項目の選択に関係なく全項目を対象にします。');
   }
-  if (AGG_VIEWS.has(options.view) && options.view !== 'originMonth') {
+
+  /* 集計表示か */
+  const aggregatedView = AGG_VIEWS.has(options.view);
+
+  if (aggregatedView && options.view !== 'originMonth') {
+    // 集計表示の場合
+
+    // 日ごとの残から計算することを補足する
     notes.push('集計は日ごとの残をもとに計算します（例: 平均は期間内の 1 日あたりの残）。');
   }
   const result = notes.join(' ');

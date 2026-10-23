@@ -92,10 +92,19 @@ export function DashboardView({ summary }: DashboardViewProps) {
 export function CarryoverDashboard() {
   const state = useCarryoverSummary();
 
+  /* 読み込み中か */
   if (state.status === 'loading') {
+    // 読み込み中の場合
+
+    // 読み込み中であることを表示する
     return <Panel note="データを読み込んでいます…">{null}</Panel>;
   }
+
+  /* 読み込みに失敗したか */
   if (state.status === 'error') {
+    // 読み込みに失敗した場合
+
+    // 失敗したことを表示する
     return (
       <Panel title="データを読み込めませんでした" note={state.error.message}>
         {null}

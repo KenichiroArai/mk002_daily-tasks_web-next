@@ -19,12 +19,20 @@ export function useAsync<T>(loader: (signal: AbortSignal) => Promise<T>): LoadSt
     const { signal } = controller;
     loader(signal).then(
       (data) => {
+        /* 中断されていないか */
         if (!signal.aborted) {
+          // 中断されていない場合
+
+          // 成功として結果を残す
           setResult({ status: 'success', data });
         }
       },
       (error: unknown) => {
+        /* 中断されていないか */
         if (!signal.aborted) {
+          // 中断されていない場合
+
+          // 失敗として結果を残す
           setResult({ status: 'error', error: error instanceof Error ? error : new Error(String(error)) });
         }
       },

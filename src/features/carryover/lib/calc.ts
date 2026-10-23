@@ -20,16 +20,29 @@ export type ItemColors = Record<string, string>;
  */
 export function statValue(stat: Stat | undefined, metric: Metric, target: Target): number {
   let result = 0;
+
+  /* 集計値がないか */
   if (!stat) {
+    // 集計値がない場合
+
+    // 初期値を返す
     return result;
   }
   const useMinutes = metric !== 'count';
   const total = useMinutes ? stat.minutes : stat.count;
   const checked = useMinutes ? stat.checkedMinutes : stat.checkedCount;
   let value = total;
+
+  /* 対象がチェック済みか */
   if (target === 'checked') {
+    // チェック済みの場合
+
+    // チェック済みの値にする
     value = checked;
   } else if (target === 'unchecked') {
+    // 未チェックの場合
+
+    // 未チェックの値にする
     value = total - checked;
   }
   result = metric === 'hours' ? value / 60 : value;
@@ -60,7 +73,12 @@ export function dayTotal(day: Day, items: Iterable<string>, metric: Metric, targ
  */
 export function aggregate(values: readonly number[], agg: Agg): number {
   let result = 0;
+
+  /* 値が空か */
   if (values.length === 0) {
+    // 値が空の場合
+
+    // 初期値を返す
     return result;
   }
   switch (agg) {
@@ -116,9 +134,17 @@ export function groupByMonth(days: readonly Day[]): DaysByMonth {
   for (const day of days) {
     const key = day.date.slice(0, 7);
     const list = result.get(key);
+
+    /* 同じ月の一覧があるか */
     if (list) {
+      // 同じ月の一覧がある場合
+
+      // その月の一覧へ追加する
       list.push(day);
     } else {
+      // 同じ月の一覧がない場合
+
+      // その月の一覧を作る
       result.set(key, [day]);
     }
   }

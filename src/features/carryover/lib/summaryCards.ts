@@ -19,7 +19,11 @@ export function buildSummaryCards(
 ): SummaryCardData[] {
   let result: SummaryCardData[] = [{ label: 'データなし', value: '-', sub: '期間や項目の選択を見直してください' }];
   const last = days[days.length - 1];
+  /* 最新日がないか */
   if (!last) {
+    // 最新日がない場合
+
+    // データなしのカードを返す
     return result;
   }
   const prev = days.length > 1 ? days[days.length - 2] : undefined;

@@ -20,16 +20,35 @@ export function parseQueryOptions(search: string): QueryOptions {
   const metric = pick(params, 'metric', METRICS);
   const agg = pick(params, 'agg', AGGS);
   const target = pick(params, 'target', TARGETS);
+  /* 表示があるか */
   if (view) {
+    // 表示がある場合
+
+    // 表示を初期値にする
     result.view = view;
   }
+
+  /* 指標があるか */
   if (metric) {
+    // 指標がある場合
+
+    // 指標を初期値にする
     result.metric = metric;
   }
+
+  /* 集計があるか */
   if (agg) {
+    // 集計がある場合
+
+    // 集計を初期値にする
     result.agg = agg;
   }
+
+  /* 対象があるか */
   if (target) {
+    // 対象がある場合
+
+    // 対象を初期値にする
     result.target = target;
   }
   return result;

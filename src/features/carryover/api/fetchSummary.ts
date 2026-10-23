@@ -13,12 +13,20 @@ export const SUMMARY_PATH = '/data/summary.json';
  */
 export async function fetchSummary(fetcher: typeof fetch = fetch, signal?: AbortSignal): Promise<Summary> {
   const response = await fetcher(assetPath(SUMMARY_PATH), { cache: 'no-cache', signal });
+  /* 取得が成功か */
   if (!response.ok) {
+    // 取得が成功ではない場合
+
+    // 取得失敗として例外にする
     throw new Error(`summary.json の取得に失敗しました（${response.status}）`);
   }
   const json: unknown = await response.json();
   const parsed = summarySchema.safeParse(json);
+  /* 形式が正しいか */
   if (!parsed.success) {
+    // 形式が正しくない場合
+
+    // 形式の不正として例外にする
     throw new Error(`summary.json の形式が想定と異なります: ${parsed.error.issues[0]?.message ?? '不明なエラー'}`);
   }
   const result = parsed.data;

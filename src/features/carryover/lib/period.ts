@@ -12,10 +12,19 @@ export function presetPeriod(days: readonly Day[], presetDays: number): Period {
   let result: Period = { from: '', to: '' };
   const first = days[0];
   const last = days[days.length - 1];
+  /* 期間の端がないか */
   if (!first || !last) {
+    // 期間の端がない場合
+
+    // 空の期間を返す
     return result;
   }
+
+  /* 全期間か */
   if (presetDays === 0) {
+    // 全期間の場合
+
+    // 最初の日から最新日までにする
     result = { from: first.date, to: last.date };
     return result;
   }

@@ -70,7 +70,11 @@ export function CarryoverChart({ title, note, spec, metric }: CarryoverChartProp
   const valueAxisLabel = { value: axisTitle, angle: -90, position: 'insideLeft' as const, offset: 10 };
 
   let chart: ReactNode;
+  /* 面グラフか */
   if (spec.kind === 'area') {
+    // 面グラフの場合
+
+    // 面グラフを描く
     chart = (
       <AreaChart data={spec.rows} margin={{ top: 8, right: 16, bottom: 8, left: 8 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -96,6 +100,9 @@ export function CarryoverChart({ title, note, spec, metric }: CarryoverChartProp
       </AreaChart>
     );
   } else if (spec.horizontal) {
+    // 横棒グラフの場合
+
+    // 横棒グラフを描く
     chart = (
       <BarChart data={spec.rows} layout="vertical" margin={{ top: 8, right: 16, bottom: 24, left: 8 }}>
         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -112,6 +119,9 @@ export function CarryoverChart({ title, note, spec, metric }: CarryoverChartProp
       </BarChart>
     );
   } else {
+    // 縦棒グラフの場合
+
+    // 縦棒グラフを描く
     chart = (
       <BarChart data={spec.rows} margin={{ top: 8, right: 16, bottom: 8, left: 8 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />

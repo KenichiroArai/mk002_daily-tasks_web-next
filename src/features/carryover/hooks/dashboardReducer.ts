@@ -38,9 +38,19 @@ export function dashboardReducer(state: DashboardState, action: DashboardAction)
       break;
     case 'toggleItem': {
       const selected = new Set(state.selected);
-      if (selected.has(action.item)) {
+
+      /* 選択済みか */
+      const selectedItem = selected.has(action.item);
+
+      if (selectedItem) {
+        // 選択済みの場合
+
+        // 選択を外す
         selected.delete(action.item);
       } else {
+        // 選択済みではない場合
+
+        // 選択する
         selected.add(action.item);
       }
       result = { ...state, selected };

@@ -93,7 +93,10 @@ export type ItemColors = Record<string, string>;
 
 ### 関数の戻り値
 
-kb002_daily-tasks_doc の [docs/coding-rules.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/coding-rules.md) の「戻り値」を TypeScript にも適用する。
+kb002_daily-tasks_doc の [docs/coding-rules.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/coding-rules.md) の「戻り値」と「分岐」を TypeScript にも適用する。
+
+- if、else if、else の直前に、何を判定するかを `/* コメント */` で書く。分岐の中では、先に判定結果（`// 〜の場合`）、続けて処理内容（`// 〜する`）を書く
+- 条件がメソッド呼び出し、または比較の片側がメソッドの戻り値のときは、その戻り値を判定の直前の変数へ入れる。変数やフィールドの直接比較、`instanceof`、変数だけの複合条件は切り出さない
 
 - 対象: `function` 宣言と、本体が `{ }` のアロー関数（`lib/`・`hooks/`・`api/`・reducer・テスト用の関数、`scripts/` を含む）
   - 関数の戻り値は変数 `result` で定義する
