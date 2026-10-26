@@ -101,7 +101,7 @@ kb002_daily-tasks_doc の [docs/coding-rules.md](https://github.com/KenichiroAra
 
 - 対象: `function` 宣言と、本体が `{ }` のアロー関数（`lib/`・`hooks/`・`api/`・reducer・テスト用の関数、`scripts/` を含む）
   - 関数の戻り値は変数 `result` で定義する
-  - 関数の戻り値の変数は先頭で宣言する。ただし、初期値を決められず 1 回だけ代入する場合（例: 例外を投げる検証のあとに値が決まる場合）は、ESLint の `prefer-const` に合わせ、値が決まった位置で `const result = ...;` と宣言する
+  - 関数の戻り値の変数は先頭で宣言する。代入した値をその後読まないときは、その代入を書かない。初期値をガード節などで返すときだけ、初期値を置く。初期値を決められず 1 回だけ代入する場合（例: 例外を投げる検証のあとに値が決まる場合）は、ESLint の `prefer-const` に合わせ、値が決まった位置で `const result = ...;` と宣言する
   - return 文は `return result;` に統一する
   - ガード節（早期リターン）では `result` の初期値を返す
   - `switch` の分岐では `result` に代入して `break` し、最後に `return result;` で返す
@@ -158,7 +158,7 @@ npm run format:check  # Prettier の整形の確認
 
 - [ ] `npm run lint` / `npm run typecheck` / `npm test` / `npm run build` が通り、`npm run dev` で表示と切り替えを確認
 - [ ] 構成ルール（機能単位の構成、依存の向き、コンポーネントのフォルダ構成）の順守
-- [ ] TypeScript のコーディングルール（戻り値 `result`、コンポーネントの `return` は描画だけ）の順守
+- [ ] TypeScript のコーディングルール（戻り値 `result`、読まれない初期代入は書かない、コンポーネントの `return` は描画だけ）の順守
 - [ ] kb002_daily-tasks_doc の設計書をすべて見直して更新
 - [ ] README の更新
 
