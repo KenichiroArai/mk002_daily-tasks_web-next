@@ -1,5 +1,5 @@
-import { day, sampleSummary, stat } from '../testing/fixtures';
-import { buildRanking } from './ranking';
+import { day, sampleSummary, stat } from '../fixtures';
+import { buildRanking } from '@/features/carryover/lib/ranking';
 
 describe('buildRanking', () => {
   const { days, items } = sampleSummary();

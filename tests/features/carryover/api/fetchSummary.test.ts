@@ -1,5 +1,5 @@
-import { sampleSummary } from '../testing/fixtures';
-import { fetchSummary } from './fetchSummary';
+import { sampleSummary } from '../fixtures';
+import { fetchSummary } from '@/features/carryover/api/fetchSummary';
 
 function mockFetch(body: unknown, init: { ok?: boolean; status?: number } = {}): typeof fetch {
   const result = vi.fn(async () => ({

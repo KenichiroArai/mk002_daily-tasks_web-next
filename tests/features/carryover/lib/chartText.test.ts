@@ -1,5 +1,5 @@
-import { DEFAULT_OPTIONS } from '../model';
-import { buildChartNote, buildChartTitle } from './chartText';
+import { DEFAULT_OPTIONS } from '@/features/carryover/model';
+import { buildChartNote, buildChartTitle } from '@/features/carryover/lib/chartText';
 
 describe('buildChartTitle', () => {
   it('集計方法を選べない表示では集計方法を出さない', () => {

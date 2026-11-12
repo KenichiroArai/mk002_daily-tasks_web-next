@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { ItemSelector } from './ItemSelector';
+import { ItemSelector } from '@/features/carryover/components/ItemSelector';
 
 function setup() {
   const result = { onToggle: vi.fn(), onSelectAll: vi.fn(), onSelectNone: vi.fn() };

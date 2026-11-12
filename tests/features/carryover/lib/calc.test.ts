@@ -1,4 +1,4 @@
-import { day, sampleSummary, stat } from '../testing/fixtures';
+import { day, sampleSummary, stat } from '../fixtures';
 import {
   aggregate,
   assignColors,
@@ -11,7 +11,7 @@ import {
   orderSelectedItems,
   roundMetric,
   statValue,
-} from './calc';
+} from '@/features/carryover/lib/calc';
 
 describe('statValue', () => {
   const s = stat(4, 90, 1, 30);

@@ -46,7 +46,6 @@ src/
       lib/                   # 純粋関数（集計、グラフ用データの作成など）
       hooks/                 # 状態管理やデータ読み込みのフック
       components/            # 機能の画面部品
-      testing/               # テスト用のデータ（fixtures）
   shared/
     components/ui/           # Panel、Select、Button、Card、DateRange、Swatch などの汎用部品
     components/layout/       # Header、Footer、PageContainer
@@ -55,14 +54,25 @@ src/
     types/                   # 汎用の型（LoadState など）
   config/site.ts             # サイト名、リポジトリの URL など
   styles/globals.css         # CSS 変数と要素の共通スタイル
+tests/                       # Vitest テスト（src/ をミラー）
+  features/carryover/
+    api/                     # 例: fetchSummary.test.ts
+    components/              # 例: SummaryCards/SummaryCards.test.tsx
+    hooks/
+    lib/
+    fixtures.ts              # テスト用のデータ
+  shared/
+    components/
+    hooks/
+    lib/
 ```
 
 - 依存の向きは `app` → `features` → `shared` の一方向だけにする。`shared/`・`config/` から `features/` を import しない
 - 機能の内部（`@/features/<機能名>/xxx`）を機能の外から import しない。`@/features/<機能名>` の `index.ts` を経由する。同じ機能の中では相対パスを使う
-- 上の 2 つは `eslint.config.mjs` の `no-restricted-imports` でチェックする
+- 上の 2 つは `eslint.config.mjs` の `no-restricted-imports` でチェックする（`src/` 向け。`tests/` からは `@/` で対象モジュールを import してよい）
 - 機能の外のファイルは `@/`（`src/` を指す）のパスエイリアスで import する
-- コンポーネントは 1 フォルダにまとめる（`Xxx.tsx`、`Xxx.module.css`、`Xxx.test.tsx`、`index.ts`）。スタイルは CSS Modules にし、全体に効くものだけ `styles/globals.css` に置く
-- 計算ロジックは `lib/` の純粋関数にしてコンポーネントから切り離し、Vitest でテストする。コンポーネントは Testing Library でテストする。テストファイルは対象と同じフォルダに `*.test.ts(x)` で置く
+- コンポーネントは 1 フォルダにまとめる（`Xxx.tsx`、`Xxx.module.css`、`index.ts`）。スタイルは CSS Modules にし、全体に効くものだけ `styles/globals.css` に置く
+- 計算ロジックは `lib/` の純粋関数にしてコンポーネントから切り離し、Vitest でテストする。コンポーネントは Testing Library でテストする。テストファイルは `tests/` に `src/` と同じ相対パスで `*.test.ts(x)` として置く。フィクスチャは `tests/features/<機能名>/fixtures.ts` に置く
 - `summary.json` は `model/` の zod スキーマで実行時に検証し、形式が想定と違う場合は画面にエラーを表示する
 - データ（daily-tasks-git の `docs/data/`）を変更する処理は Java 側（gr002_daily-tasks）だけで行い、画面は読み取りだけにする
 - 静的エクスポートのため、サーバー機能（API Routes、`cookies()` などの動的機能、画像最適化）は使わない
@@ -93,11 +103,13 @@ export type ItemColors = Record<string, string>;
 
 ### 関数の戻り値
 
-kb002_daily-tasks_doc の [docs/coding-rules.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/coding-rules.md) の「戻り値」と「分岐」を TypeScript にも適用する。
+kb002_daily-tasks_doc の [docs/coding-rules.md](https://github.com/KenichiroArai/kb002_daily-tasks_doc/blob/main/docs/coding-rules.md) の「戻り値」「ローカル変数」「処理コメント」「分岐」を TypeScript にも適用する。
 
+- 処理の見出し・大別は `/* コメント */`、個別の処理は `// コメント` で書く。既に `/* */` がある関数では他の大別にも付け、短い関数でコメントがないものはそのままでよい
 - if、else if、else の直前に、何を判定するかを `/* コメント */` で書く。分岐の中では、先に判定結果（`// 〜の場合`）、続けて処理内容（`// 〜する`）を書く
 - 条件がメソッド呼び出し、または比較の片側がメソッドの戻り値のときは、その戻り値を判定の直前の変数へ入れる。変数やフィールドの直接比較、`instanceof`、変数だけの複合条件は切り出さない
 - メソッドの戻り値を、そのまま次のメソッドの呼び出し先にしない。いったん変数に受ける。配列の `map` / `filter` / `join` / `reduce`、`Promise.then`、zod のスキーマ連鎖、テストの `expect(...).toBe()` や Testing Library のマッチャーは定型として残してよい
+- `result` 以外のローカル変数は使う直前で宣言し、使うブロックの内側に限り定義する。代入した初期値をその後読まないときは初期化しない。戻り値 `result` は先頭宣言の例外とする（詳細は coding-rules の「ローカル変数」）
 
 - 対象: `function` 宣言と、本体が `{ }` のアロー関数（`lib/`・`hooks/`・`api/`・reducer・テスト用の関数、`scripts/` を含む）
   - 関数の戻り値は変数 `result` で定義する
@@ -158,7 +170,7 @@ npm run format:check  # Prettier の整形の確認
 
 - [ ] `npm run lint` / `npm run typecheck` / `npm test` / `npm run build` が通り、`npm run dev` で表示と切り替えを確認
 - [ ] 構成ルール（機能単位の構成、依存の向き、コンポーネントのフォルダ構成）の順守
-- [ ] TypeScript のコーディングルール（戻り値 `result`、読まれない初期代入は書かない、コンポーネントの `return` は描画だけ）の順守
+- [ ] TypeScript のコーディングルール（戻り値 `result`、読まれない初期代入は書かない、ローカル変数は直前・最小スコープで未使用初期化なし（`result` は先頭）、コンポーネントの `return` は描画だけ）の順守
 - [ ] kb002_daily-tasks_doc の設計書をすべて見直して更新
 - [ ] README の更新
 

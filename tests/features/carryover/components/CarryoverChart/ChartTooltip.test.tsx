@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { ChartTooltip } from './ChartTooltip';
+import { ChartTooltip } from '@/features/carryover/components/CarryoverChart/ChartTooltip';
 
 const entries = [
   { name: '英語', value: 1, color: '#000' },

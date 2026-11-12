@@ -1,4 +1,4 @@
-import { assetPath } from './assetPath';
+import { assetPath } from '@/shared/lib/assetPath';
 
 describe('assetPath', () => {
   it('basePath がない場合はパスをそのまま返す', () => {

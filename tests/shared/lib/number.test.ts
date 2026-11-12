@@ -1,4 +1,4 @@
-import { formatNumber, roundTo } from './number';
+import { formatNumber, roundTo } from '@/shared/lib/number';
 
 describe('roundTo', () => {
   it('指定した桁数で四捨五入する', () => {

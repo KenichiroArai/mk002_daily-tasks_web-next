@@ -1,4 +1,4 @@
-import { parseQueryOptions } from './queryOptions';
+import { parseQueryOptions } from '@/features/carryover/lib/queryOptions';
 
 describe('parseQueryOptions', () => {
   it('クエリがない場合は空', () => {

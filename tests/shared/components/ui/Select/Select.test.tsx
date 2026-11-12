@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { Select } from './Select';
+import { Select } from '@/shared/components/ui/Select';
 
 const options = [
   { value: 'a', label: 'A' },

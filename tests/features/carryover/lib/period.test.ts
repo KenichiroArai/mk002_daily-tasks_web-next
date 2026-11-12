@@ -1,5 +1,5 @@
-import { sampleSummary } from '../testing/fixtures';
-import { presetPeriod } from './period';
+import { sampleSummary } from '../fixtures';
+import { presetPeriod } from '@/features/carryover/lib/period';
 
 describe('presetPeriod', () => {
   const days = sampleSummary().days;

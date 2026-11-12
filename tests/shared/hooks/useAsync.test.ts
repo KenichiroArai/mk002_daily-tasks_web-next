@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 
-import { useAsync } from './useAsync';
+import { useAsync } from '@/shared/hooks/useAsync';
 
 describe('useAsync', () => {
   it('成功すると success とデータを返す', async () => {

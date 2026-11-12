@@ -1,8 +1,8 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { sampleSummary } from '../../testing/fixtures';
-import { CarryoverDashboard, DashboardView } from './CarryoverDashboard';
+import { sampleSummary } from '../../fixtures';
+import { CarryoverDashboard, DashboardView } from '@/features/carryover/components/CarryoverDashboard/CarryoverDashboard';
 
 describe('DashboardView', () => {
   it('最新の情報とサマリカードを表示する', () => {

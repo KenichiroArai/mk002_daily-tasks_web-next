@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { DEFAULT_OPTIONS } from '../../model';
-import { DashboardControls } from './DashboardControls';
+import { DEFAULT_OPTIONS } from '@/features/carryover/model';
+import { DashboardControls } from '@/features/carryover/components/DashboardControls';
 
 function setup(view: (typeof DEFAULT_OPTIONS)['view'] = 'daily') {
   const result = { onOptionsChange: vi.fn(), onPeriodChange: vi.fn(), onPreset: vi.fn() };

@@ -1,5 +1,5 @@
-import { sampleSummary } from '../testing/fixtures';
-import { createInitialState, dashboardReducer } from './dashboardReducer';
+import { sampleSummary } from '../fixtures';
+import { createInitialState, dashboardReducer } from '@/features/carryover/hooks/dashboardReducer';
 
 describe('createInitialState', () => {
   it('全期間・全項目を選択した状態にする', () => {

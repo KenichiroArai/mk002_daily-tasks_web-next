@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { SummaryCards } from './SummaryCards';
+import { SummaryCards } from '@/features/carryover/components/SummaryCards';
 
 describe('SummaryCards', () => {
   it('カードのラベル・値・補足を表示する', () => {

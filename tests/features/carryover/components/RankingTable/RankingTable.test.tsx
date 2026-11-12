@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 
-import { RankingTable } from './RankingTable';
+import { RankingTable } from '@/features/carryover/components/RankingTable';
 
 describe('RankingTable', () => {
   it('項目ごとの行を指標に応じた書式で表示する', () => {

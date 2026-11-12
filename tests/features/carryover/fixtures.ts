@@ -1,4 +1,4 @@
-import type { Day, ItemStats, Stat, Summary } from '../model';
+import type { Day, ItemStats, Stat, Summary } from '@/features/carryover/model';
 
 /**
  * テスト用の集計値を作る。

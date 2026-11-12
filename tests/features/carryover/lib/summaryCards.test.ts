@@ -1,5 +1,5 @@
-import { sampleSummary } from '../testing/fixtures';
-import { buildSummaryCards } from './summaryCards';
+import { sampleSummary } from '../fixtures';
+import { buildSummaryCards } from '@/features/carryover/lib/summaryCards';
 
 describe('buildSummaryCards', () => {
   const { days, items } = sampleSummary();

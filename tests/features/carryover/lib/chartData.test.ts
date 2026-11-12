@@ -1,7 +1,7 @@
-import { DEFAULT_OPTIONS, type DashboardOptions } from '../model';
-import { sampleSummary } from '../testing/fixtures';
-import { assignColors } from './calc';
-import { buildChartSpec } from './chartData';
+import { DEFAULT_OPTIONS, type DashboardOptions } from '@/features/carryover/model';
+import { sampleSummary } from '../fixtures';
+import { assignColors } from '@/features/carryover/lib/calc';
+import { buildChartSpec } from '@/features/carryover/lib/chartData';
 
 const summary = sampleSummary();
 const colors = assignColors(summary.items);
