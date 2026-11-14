@@ -16,6 +16,32 @@ export type DaysByMonth = Map<string, Day[]>;
 export type ItemColors = Record<string, string>;
 
 /**
+ * 全体値とチェック済み値から、対象に応じた値を返す。
+ */
+function valueByTarget(total: number, checked: number, target: Target): number {
+  let result = 0;
+
+  /* 対象がチェック済みか */
+  if (target === 'checked') {
+    // チェック済みの場合
+
+    // チェック済みの値にする
+    result = checked;
+  } else if (target === 'unchecked') {
+    // 未チェックの場合
+
+    // 未チェックの値にする
+    result = total - checked;
+  } else {
+    // すべての場合
+
+    // 全体の値にする
+    result = total;
+  }
+  return result;
+}
+
+/**
  * 集計値から、指標と対象に応じた値を取り出す。
  */
 export function statValue(stat: Stat | undefined, metric: Metric, target: Target): number {
@@ -28,24 +54,17 @@ export function statValue(stat: Stat | undefined, metric: Metric, target: Target
     // 初期値を返す
     return result;
   }
-  const useMinutes = metric !== 'count';
-  const total = useMinutes ? stat.minutes : stat.count;
-  const checked = useMinutes ? stat.checkedMinutes : stat.checkedCount;
-  let value = total;
-
-  /* 対象がチェック済みか */
-  if (target === 'checked') {
-    // チェック済みの場合
-
-    // チェック済みの値にする
-    value = checked;
-  } else if (target === 'unchecked') {
-    // 未チェックの場合
-
-    // 未チェックの値にする
-    value = total - checked;
+  switch (metric) {
+    case 'count':
+      result = valueByTarget(stat.count, stat.checkedCount, target);
+      break;
+    case 'minutes':
+      result = valueByTarget(stat.minutes, stat.checkedMinutes, target);
+      break;
+    case 'hours':
+      result = valueByTarget(stat.minutes, stat.checkedMinutes, target) / 60;
+      break;
   }
-  result = metric === 'hours' ? value / 60 : value;
   return result;
 }
 
