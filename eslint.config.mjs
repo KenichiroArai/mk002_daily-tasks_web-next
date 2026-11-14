@@ -21,6 +21,12 @@ export default defineConfig([
   ...nextVitals,
   ...nextTs,
   {
+    // 戻り値 result は先頭で let 宣言してから代入する（コーディングルール）。prefer-const と衝突するため無効化する
+    rules: {
+      'prefer-const': 'off',
+    },
+  },
+  {
     files: ['src/app/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': ['error', { patterns: [noFeatureInternalImport] }],

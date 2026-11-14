@@ -12,6 +12,7 @@ export const SUMMARY_PATH = '/data/summary.json';
  * @throws 取得に失敗した場合、中断された場合、または形式が想定と異なる場合
  */
 export async function fetchSummary(fetcher: typeof fetch = fetch, signal?: AbortSignal): Promise<Summary> {
+  let result: Summary;
   const response = await fetcher(assetPath(SUMMARY_PATH), { cache: 'no-cache', signal });
   /* 取得が成功か */
   if (!response.ok) {
@@ -29,6 +30,6 @@ export async function fetchSummary(fetcher: typeof fetch = fetch, signal?: Abort
     // 形式の不正として例外にする
     throw new Error(`summary.json の形式が想定と異なります: ${parsed.error.issues[0]?.message ?? '不明なエラー'}`);
   }
-  const result = parsed.data;
+  result = parsed.data;
   return result;
 }

@@ -5,8 +5,9 @@
  * `fetch` などで public/ のファイルを参照するときに使う。
  */
 export function assetPath(path: string, basePath: string = process.env.NEXT_PUBLIC_BASE_PATH ?? ''): string {
+  let result: string;
   const normalizedBase = basePath.replace(/\/+$/, '');
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  const result = `${normalizedBase}${normalizedPath}`;
+  result = `${normalizedBase}${normalizedPath}`;
   return result;
 }

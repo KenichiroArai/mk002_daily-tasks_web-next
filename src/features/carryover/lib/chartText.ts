@@ -5,8 +5,9 @@ import { AGG_VIEWS, type DashboardOptions } from '../model';
  * グラフの見出し
  */
 export function buildChartTitle(options: DashboardOptions): string {
+  let result: string;
   const aggText = AGG_VIEWS.has(options.view) ? `・${AGG_LABELS[options.agg]}` : '';
-  const result = `${VIEW_LABELS[options.view]}：${METRIC_LABELS[options.metric]}${aggText}（${TARGET_LABELS[options.target]}）`;
+  result = `${VIEW_LABELS[options.view]}：${METRIC_LABELS[options.metric]}${aggText}（${TARGET_LABELS[options.target]}）`;
   return result;
 }
 
@@ -14,6 +15,7 @@ export function buildChartTitle(options: DashboardOptions): string {
  * グラフの補足
  */
 export function buildChartNote(options: DashboardOptions): string {
+  let result: string;
   const notes: string[] = [];
   /* 持ち越し元の月ごとか */
   if (options.view === 'originMonth') {
@@ -32,6 +34,6 @@ export function buildChartNote(options: DashboardOptions): string {
     // 日ごとの残から計算することを補足する
     notes.push('集計は日ごとの残をもとに計算します（例: 平均は期間内の 1 日あたりの残）。');
   }
-  const result = notes.join(' ');
+  result = notes.join(' ');
   return result;
 }

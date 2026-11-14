@@ -33,9 +33,10 @@ type CarryoverChartProps = {
 
 function toEntries(spec: ChartSpec, props: TooltipContentProps): ChartTooltipEntry[] {
   const result = (props.payload ?? []).map((item) => {
+    let result: ChartTooltipEntry;
     const row = item.payload as ChartRow | undefined;
     const series = spec.series.find((s) => s.key === item.dataKey);
-    const result: ChartTooltipEntry = {
+    result = {
       name: spec.horizontal ? String(row?.label ?? '') : (series?.label ?? String(item.name ?? '')),
       value: Number(item.value ?? 0),
       color: row?.color ?? series?.color ?? '#000',

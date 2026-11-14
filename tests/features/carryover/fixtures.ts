@@ -17,6 +17,7 @@ export function day(
   byItem: ItemStats,
   byOriginMonth: ItemStats = {},
 ): Day {
+  let result: Day;
   const total = Object.values(byItem).reduce(
     (acc, s) =>
       stat(
@@ -27,7 +28,7 @@ export function day(
       ),
     stat(0, 0),
   );
-  const result: Day = { date, issue, declaredCount: null, total, byItem, byOriginMonth };
+  result = { date, issue, declaredCount: null, total, byItem, byOriginMonth };
   return result;
 }
 

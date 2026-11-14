@@ -50,8 +50,9 @@ function aggregatedLabel(options: DashboardOptions): string {
 }
 
 function buildDaily({ days, items, options }: BuildContext): ChartSpec {
+  let result: ChartSpec;
   const { metric, target } = options;
-  const result: ChartSpec = {
+  result = {
     kind: 'area',
     stacked: false,
     horizontal: false,
@@ -62,8 +63,9 @@ function buildDaily({ days, items, options }: BuildContext): ChartSpec {
 }
 
 function buildDailyItem({ days, items, colors, options }: BuildContext): ChartSpec {
+  let result: ChartSpec;
   const { metric, target } = options;
-  const result: ChartSpec = {
+  result = {
     kind: 'area',
     stacked: true,
     horizontal: false,
@@ -80,9 +82,10 @@ function buildDailyItem({ days, items, colors, options }: BuildContext): ChartSp
 }
 
 function buildMonthly({ days, items, options }: BuildContext): ChartSpec {
+  let result: ChartSpec;
   const { metric, target, agg } = options;
   const months = groupByMonth(days);
-  const result: ChartSpec = {
+  result = {
     kind: 'bar',
     stacked: false,
     horizontal: false,
@@ -102,9 +105,10 @@ function buildMonthly({ days, items, options }: BuildContext): ChartSpec {
 }
 
 function buildMonthlyItem({ days, items, colors, options }: BuildContext): ChartSpec {
+  let result: ChartSpec;
   const { metric, target, agg } = options;
   const months = groupByMonth(days);
-  const result: ChartSpec = {
+  result = {
     kind: 'bar',
     stacked: true,
     horizontal: false,
@@ -127,6 +131,7 @@ function buildMonthlyItem({ days, items, colors, options }: BuildContext): Chart
 }
 
 function buildItem({ days, items, colors, options }: BuildContext): ChartSpec {
+  let result: ChartSpec;
   const { metric, target, agg } = options;
   const rows = items
     .map((item) => ({
@@ -137,7 +142,7 @@ function buildItem({ days, items, colors, options }: BuildContext): ChartSpec {
       ),
     }))
     .sort((a, b) => b.value - a.value);
-  const result: ChartSpec = {
+  result = {
     kind: 'bar',
     stacked: false,
     horizontal: true,
@@ -148,9 +153,10 @@ function buildItem({ days, items, colors, options }: BuildContext): ChartSpec {
 }
 
 function buildOriginMonth({ days, options }: BuildContext): ChartSpec {
+  let result: ChartSpec;
   const { metric, target, agg } = options;
   const monthKeys = [...new Set(days.flatMap((day) => Object.keys(day.byOriginMonth)))].sort();
-  const result: ChartSpec = {
+  result = {
     kind: 'bar',
     stacked: false,
     horizontal: false,

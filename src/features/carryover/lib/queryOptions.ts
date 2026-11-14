@@ -3,8 +3,9 @@ import { AGGS, METRICS, TARGETS, VIEWS, type DashboardOptions } from '../model';
 type QueryOptions = Partial<Pick<DashboardOptions, 'view' | 'metric' | 'agg' | 'target'>>;
 
 function pick<T extends string>(params: URLSearchParams, key: string, allowed: readonly T[]): T | undefined {
+  let result: T | undefined;
   const value = params.get(key);
-  const result = allowed.find((candidate) => candidate === value);
+  result = allowed.find((candidate) => candidate === value);
   return result;
 }
 
@@ -14,8 +15,8 @@ function pick<T extends string>(params: URLSearchParams, key: string, allowed: r
  * 例: `?view=monthly&metric=hours`
  */
 export function parseQueryOptions(search: string): QueryOptions {
-  const params = new URLSearchParams(search);
   const result: QueryOptions = {};
+  const params = new URLSearchParams(search);
   const view = pick(params, 'view', VIEWS);
   const metric = pick(params, 'metric', METRICS);
   const agg = pick(params, 'agg', AGGS);

@@ -21,8 +21,9 @@ export function buildRanking(
 ): RankingRow[] {
   const result = items
     .map((item) => {
+      let result: RankingRow;
       const values = days.map((day) => dayItemValue(day, item, metric, target));
-      const result: RankingRow = {
+      result = {
         item,
         latest: values[values.length - 1] ?? 0,
         avg: aggregate(values, 'avg'),
