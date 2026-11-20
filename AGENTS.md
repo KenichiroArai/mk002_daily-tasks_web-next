@@ -44,7 +44,7 @@ src/
       model/                 # 型と zod スキーマ、表示条件の型
       constants/             # ラベル、色などの定数
       lib/                   # 純粋関数（集計、グラフ用データの作成など）
-      hooks/                 # 状態管理やデータ読み込みのフック
+      hooks/                 # 状態管理やデータ読み込みのフック（フック専用の reducer も置く。外へは公開しない）
       components/            # 機能の画面部品
   shared/
     components/ui/           # Panel、Select、Button、Card、DateRange、Swatch などの汎用部品
@@ -73,6 +73,7 @@ tests/                       # Vitest テスト（src/ をミラー）
 - 機能の外のファイルは `@/`（`src/` を指す）のパスエイリアスで import する
 - コンポーネントは 1 フォルダにまとめる（`Xxx.tsx`、`Xxx.module.css`、`index.ts`）。スタイルは CSS Modules にし、全体に効くものだけ `styles/globals.css` に置く
 - 計算ロジックは `lib/` の純粋関数にしてコンポーネントから切り離し、Vitest でテストする。コンポーネントは Testing Library でテストする。テストファイルは `tests/` に `src/` と同じ相対パスで `*.test.ts(x)` として置く。フィクスチャは `tests/features/<機能名>/fixtures.ts` に置く
+- 純粋関数の置き場所は使われ方で決める。複数の場所から使う React 非依存の計算は `lib/` に置く。特定のフック専用で外へ公開しないもの（`dashboardReducer` など）は、そのフックと同じ `hooks/` に置き、`hooks/index.ts` では公開しない
 - `summary.json` は `model/` の zod スキーマで実行時に検証し、形式が想定と違う場合は画面にエラーを表示する
 - データ（daily-tasks-git の `docs/data/`）を変更する処理は Java 側（gr002_daily-tasks）だけで行い、画面は読み取りだけにする
 - 静的エクスポートのため、サーバー機能（API Routes、`cookies()` などの動的機能、画像最適化）は使わない

@@ -8,6 +8,9 @@ import { createInitialState, dashboardReducer } from './dashboardReducer';
 
 /**
  * 画面の表示条件と選択中の項目を管理する。
+ *
+ * 状態の変え方（操作ごとのルール）は、同じフォルダの dashboardReducer.ts にある。
+ * このフックは、それを `useReducer` に渡し、画面から呼びやすい操作関数にして返す。
  */
 export function useDashboardOptions(summary: Summary, initialOptions: Partial<DashboardOptions> = {}) {
   const [state, dispatch] = useReducer(dashboardReducer, undefined, () => createInitialState(summary, initialOptions));
