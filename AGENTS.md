@@ -43,7 +43,7 @@ src/
       api/                   # データ取得（fetchSummary など）
       model/                 # 型と zod スキーマ、表示条件の型
       constants/             # ラベル、色などの定数
-      lib/                   # 純粋関数（集計、グラフ用データの作成など）
+      lib/                   # 純粋関数（集計、グラフ用データの作成など）。関連するものはサブフォルダにまとめてよい（例: summaryCards/）
       hooks/                 # 状態管理やデータ読み込みのフック（フック専用の reducer も置く。外へは公開しない）
       components/            # 機能の画面部品
   shared/

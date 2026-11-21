@@ -41,10 +41,7 @@ export function DashboardView({ summary }: DashboardViewProps) {
     () => filterDays(summary.days, options.from, options.to),
     [summary.days, options.from, options.to],
   );
-  const cards = useMemo(
-    () => buildSummaryCards(days, items, options.metric, options.target),
-    [days, items, options.metric, options.target],
-  );
+  const cards = useMemo(() => buildSummaryCards({ days, items, options }), [days, items, options]);
   const spec = useMemo(() => buildChartSpec(days, items, colors, options), [days, items, colors, options]);
   const ranking = useMemo(
     () => buildRanking(days, items, options.metric, options.target),
