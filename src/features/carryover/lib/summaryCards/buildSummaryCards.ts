@@ -11,7 +11,8 @@ import type { SummaryCardData, SummaryCardsInput } from './types';
  */
 export function buildSummaryCards(input: SummaryCardsInput): SummaryCardData[] {
   let result: SummaryCardData[] = [buildEmptyCard()];
-  const last = input.days[input.days.length - 1];
+  const { days, items, options } = input;
+  const last = days[days.length - 1];
   /* 最新日がないか */
   if (!last) {
     // 最新日がない場合
@@ -19,12 +20,13 @@ export function buildSummaryCards(input: SummaryCardsInput): SummaryCardData[] {
     // データなしのカードを返す
     return result;
   }
+  const { metric, target } = options;
   result = [
-    buildLatestCountCard(input),
-    buildLatestHoursCard(input),
-    buildPeriodAverageCard(input),
-    buildMaxCard(input),
-    buildMinCard(input),
+    buildLatestCountCard(days, items, target),
+    buildLatestHoursCard(days, items, target),
+    buildPeriodAverageCard(days, items, metric, target),
+    buildMaxCard(days, items, metric, target),
+    buildMinCard(days, items, metric, target),
   ];
   return result;
 }
