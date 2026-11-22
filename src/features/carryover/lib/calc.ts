@@ -197,3 +197,16 @@ export function orderSelectedItems(items: readonly string[], selected: ReadonlyS
   const result = items.filter((item) => selected.has(item));
   return result;
 }
+
+/**
+ * 期間内で、指標と対象の値が 1 日でも正の項目だけを返す（元の並び順を保つ）。
+ */
+export function itemsWithValueInPeriod(
+  days: readonly Day[],
+  items: readonly string[],
+  metric: Metric,
+  target: Target,
+): string[] {
+  const result = items.filter((item) => days.some((day) => dayItemValue(day, item, metric, target) > 0));
+  return result;
+}

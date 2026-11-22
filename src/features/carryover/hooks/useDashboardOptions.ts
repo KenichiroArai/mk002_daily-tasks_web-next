@@ -22,7 +22,7 @@ export function useDashboardOptions(summary: Summary, initialOptions: Partial<Da
     [summary.days],
   );
   const toggleItem = useCallback((item: string) => dispatch({ type: 'toggleItem', item }), []);
-  const selectAll = useCallback(() => dispatch({ type: 'selectAll', items: summary.items }), [summary.items]);
+  const selectAll = useCallback((items: readonly string[]) => dispatch({ type: 'selectAll', items }), []);
   const selectNone = useCallback(() => dispatch({ type: 'selectNone' }), []);
 
   const result = useMemo(

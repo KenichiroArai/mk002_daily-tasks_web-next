@@ -13,6 +13,7 @@ import {
   buildRanking,
   buildSummaryCards,
   filterDays,
+  itemsWithValueInPeriod,
   orderSelectedItems,
 } from '../../lib';
 import type { Summary } from '../../model';
@@ -36,11 +37,15 @@ export function DashboardView({ summary }: DashboardViewProps) {
     useDashboardOptions(summary, queryOptions);
 
   const colors = useMemo(() => assignColors(summary.items), [summary.items]);
-  const items = useMemo(() => orderSelectedItems(summary.items, selected), [summary.items, selected]);
   const days = useMemo(
     () => filterDays(summary.days, options.from, options.to),
     [summary.days, options.from, options.to],
   );
+  const visibleItems = useMemo(
+    () => itemsWithValueInPeriod(days, summary.items, options.metric, options.target),
+    [days, summary.items, options.metric, options.target],
+  );
+  const items = useMemo(() => orderSelectedItems(visibleItems, selected), [visibleItems, selected]);
   const cards = useMemo(() => buildSummaryCards({ days, items, options }), [days, items, options]);
   const spec = useMemo(() => buildChartSpec(days, items, colors, options), [days, items, colors, options]);
   const ranking = useMemo(
@@ -70,11 +75,11 @@ export function DashboardView({ summary }: DashboardViewProps) {
         onPreset={applyPreset}
       />
       <ItemSelector
-        items={summary.items}
+        items={visibleItems}
         colors={colors}
         selected={selected}
         onToggle={toggleItem}
-        onSelectAll={selectAll}
+        onSelectAll={() => selectAll(visibleItems)}
         onSelectNone={selectNone}
       />
       <CarryoverChart title={chartTitle} note={chartNote} spec={spec} metric={options.metric} />

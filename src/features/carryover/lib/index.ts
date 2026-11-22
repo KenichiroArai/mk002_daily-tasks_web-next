@@ -7,6 +7,7 @@ export {
   formatMetric,
   formatMetricWithUnit,
   groupByMonth,
+  itemsWithValueInPeriod,
   orderSelectedItems,
   roundMetric,
   statValue,

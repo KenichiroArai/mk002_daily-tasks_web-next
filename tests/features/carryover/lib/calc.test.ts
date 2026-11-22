@@ -8,6 +8,7 @@ import {
   formatMetric,
   formatMetricWithUnit,
   groupByMonth,
+  itemsWithValueInPeriod,
   orderSelectedItems,
   roundMetric,
   statValue,
@@ -141,5 +142,37 @@ describe('assignColors / orderSelectedItems', () => {
 
   it('元の並び順を保って選択した項目を返す', () => {
     expect(orderSelectedItems(['a', 'b', 'c'], new Set(['c', 'a']))).toEqual(['a', 'c']);
+  });
+});
+
+describe('itemsWithValueInPeriod', () => {
+  const days = [
+    day('2026-01-01', 1, { 英語: stat(2, 30), 数学: stat(0, 0), 国語: stat(0, 45) }),
+    day('2026-01-02', 2, { 英語: stat(0, 0), 数学: stat(0, 0), 国語: stat(1, 0) }),
+  ];
+  const items = ['英語', '数学', '国語'];
+
+  it('期間内すべて 0 の項目は除外する', () => {
+    expect(itemsWithValueInPeriod(days, items, 'count', 'all')).toEqual(['英語', '国語']);
+  });
+
+  it('1 日でも正なら残す', () => {
+    expect(itemsWithValueInPeriod(days, items, 'minutes', 'all')).toEqual(['英語', '国語']);
+  });
+
+  it('指標に追従する', () => {
+    const mixed = [day('2026-01-01', 1, { 英語: stat(0, 30), 数学: stat(2, 0) })];
+    expect(itemsWithValueInPeriod(mixed, ['英語', '数学'], 'count', 'all')).toEqual(['数学']);
+    expect(itemsWithValueInPeriod(mixed, ['英語', '数学'], 'minutes', 'all')).toEqual(['英語']);
+  });
+
+  it('対象に追従する', () => {
+    const withChecked = [day('2026-01-01', 1, { 英語: stat(2, 30, 2, 30), 数学: stat(2, 30, 0, 0) })];
+    expect(itemsWithValueInPeriod(withChecked, ['英語', '数学'], 'count', 'checked')).toEqual(['英語']);
+    expect(itemsWithValueInPeriod(withChecked, ['英語', '数学'], 'count', 'unchecked')).toEqual(['数学']);
+  });
+
+  it('日がない場合は空を返す', () => {
+    expect(itemsWithValueInPeriod([], items, 'count', 'all')).toEqual([]);
   });
 });

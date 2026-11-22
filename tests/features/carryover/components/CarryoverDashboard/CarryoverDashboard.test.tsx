@@ -19,6 +19,16 @@ describe('DashboardView', () => {
     expect(within(table).queryByText('数学')).not.toBeInTheDocument();
   });
 
+  it('期間内で値が 0 の項目は選択と集計表に出さない', async () => {
+    const summary = sampleSummary();
+    summary.items = [...summary.items, '国語'];
+    render(<DashboardView summary={summary} />);
+    expect(screen.queryByLabelText('国語')).not.toBeInTheDocument();
+    expect(within(screen.getByRole('table')).queryByText('国語')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('英語')).toBeInTheDocument();
+    expect(screen.getByLabelText('数学')).toBeInTheDocument();
+  });
+
   it('表示を変えるとグラフの見出しが変わる', async () => {
     render(<DashboardView summary={sampleSummary()} />);
     await userEvent.selectOptions(screen.getByLabelText('表示'), 'monthly');
