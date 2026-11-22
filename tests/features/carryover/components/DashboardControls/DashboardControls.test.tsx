@@ -32,4 +32,10 @@ describe('DashboardControls', () => {
     await userEvent.click(screen.getByRole('button', { name: '直近30日' }));
     expect(onPreset).toHaveBeenCalledWith(30);
   });
+
+  it('最新（1日）を押すと 1 が渡される', async () => {
+    const { onPreset } = setup();
+    await userEvent.click(screen.getByRole('button', { name: '最新（1日）' }));
+    expect(onPreset).toHaveBeenCalledWith(1);
+  });
 });

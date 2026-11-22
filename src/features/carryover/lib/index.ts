@@ -15,6 +15,8 @@ export {
 export type { DaysByMonth, ItemColors } from './calc';
 export { buildChartSpec } from './chartData';
 export type { ChartRow, ChartSeries, ChartSpec } from './chartData';
+export { buildValueAxis, maxChartValue } from './chartAxis';
+export type { ValueAxis } from './chartAxis';
 export { buildChartNote, buildChartTitle } from './chartText';
 export { presetPeriod } from './period';
 export { parseQueryOptions } from './queryOptions';

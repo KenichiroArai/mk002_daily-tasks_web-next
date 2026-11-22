@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import {
   Area,
   AreaChart,
@@ -19,7 +19,7 @@ import {
 import { Panel } from '@/shared/components/ui';
 
 import { METRIC_LABELS } from '../../constants';
-import type { ChartRow, ChartSpec } from '../../lib';
+import { buildValueAxis, formatMetric, maxChartValue, type ChartRow, type ChartSpec } from '../../lib';
 import type { Metric } from '../../model';
 import styles from './CarryoverChart.module.css';
 import { ChartTooltip, type ChartTooltipEntry } from './ChartTooltip';
@@ -52,6 +52,9 @@ function toEntries(spec: ChartSpec, props: TooltipContentProps): ChartTooltipEnt
 export function CarryoverChart({ title, note, spec, metric }: CarryoverChartProps) {
   const axisTitle = METRIC_LABELS[metric];
   const showLegend = spec.series.length > 1;
+  const valueAxis = useMemo(() => buildValueAxis(metric, maxChartValue(spec)), [metric, spec]);
+  const formatTick = (value: number) => formatMetric(value, metric);
+  const allowDecimals = metric === 'hours';
 
   const tooltip = (
     <Tooltip
@@ -80,7 +83,13 @@ export function CarryoverChart({ title, note, spec, metric }: CarryoverChartProp
       <AreaChart data={spec.rows} margin={{ top: 8, right: 16, bottom: 8, left: 8 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="label" minTickGap={24} />
-        <YAxis label={valueAxisLabel} allowDecimals />
+        <YAxis
+          domain={valueAxis.domain}
+          ticks={valueAxis.ticks}
+          tickFormatter={formatTick}
+          label={valueAxisLabel}
+          allowDecimals={allowDecimals}
+        />
         {tooltip}
         {legend}
         {spec.series.map((series) => (
@@ -107,7 +116,14 @@ export function CarryoverChart({ title, note, spec, metric }: CarryoverChartProp
     chart = (
       <BarChart data={spec.rows} layout="vertical" margin={{ top: 8, right: 16, bottom: 24, left: 8 }}>
         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-        <XAxis type="number" label={{ value: axisTitle, position: 'insideBottom', offset: -12 }} />
+        <XAxis
+          type="number"
+          domain={valueAxis.domain}
+          ticks={valueAxis.ticks}
+          tickFormatter={formatTick}
+          allowDecimals={allowDecimals}
+          label={{ value: axisTitle, position: 'insideBottom', offset: -12 }}
+        />
         <YAxis type="category" dataKey="label" width={280} interval={0} />
         {tooltip}
         {spec.series.map((series) => (
@@ -127,7 +143,13 @@ export function CarryoverChart({ title, note, spec, metric }: CarryoverChartProp
       <BarChart data={spec.rows} margin={{ top: 8, right: 16, bottom: 8, left: 8 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="label" />
-        <YAxis label={valueAxisLabel} allowDecimals />
+        <YAxis
+          domain={valueAxis.domain}
+          ticks={valueAxis.ticks}
+          tickFormatter={formatTick}
+          label={valueAxisLabel}
+          allowDecimals={allowDecimals}
+        />
         {tooltip}
         {legend}
         {spec.series.map((series) => (

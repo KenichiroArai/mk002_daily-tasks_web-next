@@ -44,11 +44,11 @@ export type DashboardAction =
   | { type: 'selectNone' };
 
 /**
- * 初期状態を作る。期間は全期間、項目はすべて選択する。
+ * 初期状態を作る。期間は最新1日、項目はすべて選択する。
  */
 export function createInitialState(summary: Summary, initialOptions: Partial<DashboardOptions> = {}): DashboardState {
   const result: DashboardState = {
-    options: { ...DEFAULT_OPTIONS, ...presetPeriod(summary.days, 0), ...initialOptions },
+    options: { ...DEFAULT_OPTIONS, ...presetPeriod(summary.days, 1), ...initialOptions },
     selected: new Set(summary.items),
   };
   return result;

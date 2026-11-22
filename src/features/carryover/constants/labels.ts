@@ -49,10 +49,11 @@ export const UNIT_LABELS: Record<Metric, string> = {
 };
 
 /**
- * 期間のプリセット（0 は全期間）
+ * 期間のプリセット（0 は全期間、1 は最新1日）
  */
 export const PERIOD_PRESETS = [
-  { days: 0, label: '全期間' },
+  { days: 1, label: '最新（1日）' },
   { days: 30, label: '直近30日' },
   { days: 90, label: '直近90日' },
+  { days: 0, label: '全期間' },
 ] as const;

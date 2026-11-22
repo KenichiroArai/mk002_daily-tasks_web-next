@@ -2,9 +2,9 @@ import { sampleSummary } from '../fixtures';
 import { createInitialState, dashboardReducer } from '@/features/carryover/hooks/dashboardReducer';
 
 describe('createInitialState', () => {
-  it('全期間・全項目を選択した状態にする', () => {
+  it('最新1日・全項目を選択した状態にする', () => {
     const state = createInitialState(sampleSummary());
-    expect(state.options.from).toBe('2026-01-30');
+    expect(state.options.from).toBe('2026-02-01');
     expect(state.options.to).toBe('2026-02-01');
     expect([...state.selected]).toEqual(['英語', '数学']);
   });
