@@ -1,6 +1,6 @@
 import { AGG_LABELS, METRIC_LABELS, ORIGIN_MONTH_COLOR, PRIMARY_COLOR } from '../constants';
 import type { DashboardOptions, Day } from '../model';
-import { aggregate, dayItemValue, dayTotal, groupByMonth, roundMetric, statValue } from './calc';
+import { aggregate, dayItemValue, groupByMonth, roundMetric, statValue } from './calc';
 import type { ItemColors } from './calc';
 
 /**
@@ -49,19 +49,6 @@ function aggregatedLabel(options: DashboardOptions): string {
   return result;
 }
 
-function buildDaily({ days, items, options }: BuildContext): ChartSpec {
-  let result: ChartSpec;
-  const { metric, target } = options;
-  result = {
-    kind: 'area',
-    stacked: false,
-    horizontal: false,
-    rows: days.map((day) => ({ label: day.date, s0: roundMetric(dayTotal(day, items, metric, target), metric) })),
-    series: [{ key: seriesKey(0), label: METRIC_LABELS[metric], color: PRIMARY_COLOR }],
-  };
-  return result;
-}
-
 function buildDailyItem({ days, items, colors, options }: BuildContext): ChartSpec {
   let result: ChartSpec;
   const { metric, target } = options;
@@ -77,29 +64,6 @@ function buildDailyItem({ days, items, colors, options }: BuildContext): ChartSp
       return result;
     }),
     series: items.map((item, index) => ({ key: seriesKey(index), label: item, color: colors[item] ?? PRIMARY_COLOR })),
-  };
-  return result;
-}
-
-function buildMonthly({ days, items, options }: BuildContext): ChartSpec {
-  let result: ChartSpec;
-  const { metric, target, agg } = options;
-  const months = groupByMonth(days);
-  result = {
-    kind: 'bar',
-    stacked: false,
-    horizontal: false,
-    rows: [...months].map(([month, monthDays]) => ({
-      label: month,
-      s0: roundMetric(
-        aggregate(
-          monthDays.map((day) => dayTotal(day, items, metric, target)),
-          agg,
-        ),
-        metric,
-      ),
-    })),
-    series: [{ key: seriesKey(0), label: aggregatedLabel(options), color: PRIMARY_COLOR }],
   };
   return result;
 }
@@ -176,9 +140,7 @@ function buildOriginMonth({ days, options }: BuildContext): ChartSpec {
 }
 
 const BUILDERS: Record<DashboardOptions['view'], (context: BuildContext) => ChartSpec> = {
-  daily: buildDaily,
   dailyItem: buildDailyItem,
-  monthly: buildMonthly,
   monthlyItem: buildMonthlyItem,
   item: buildItem,
   originMonth: buildOriginMonth,

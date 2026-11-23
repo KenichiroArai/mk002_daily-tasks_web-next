@@ -31,14 +31,22 @@ describe('DashboardView', () => {
 
   it('表示を変えるとグラフの見出しが変わる', async () => {
     render(<DashboardView summary={sampleSummary()} />);
-    await userEvent.selectOptions(screen.getByLabelText('表示'), 'monthly');
-    expect(screen.getByRole('heading', { name: '月ごと（全体）：件数・平均（すべて）' })).toBeInTheDocument();
+    await userEvent.selectOptions(screen.getByLabelText('表示'), 'originMonth');
+    expect(
+      screen.getByRole('heading', { name: '持ち越し元の月ごと：残り時間（分）・平均（すべて）' }),
+    ).toBeInTheDocument();
+  });
+
+  it('初期の表示と指標は項目ごと・残り時間（分）', () => {
+    render(<DashboardView summary={sampleSummary()} />);
+    expect(screen.getByLabelText('表示')).toHaveValue('item');
+    expect(screen.getByLabelText('指標')).toHaveValue('minutes');
   });
 
   it('URL クエリの表示条件を初期値にする', () => {
-    window.history.replaceState(null, '', '/?view=item&metric=hours');
+    window.history.replaceState(null, '', '/?view=originMonth&metric=hours');
     render(<DashboardView summary={sampleSummary()} />);
-    expect(screen.getByLabelText('表示')).toHaveValue('item');
+    expect(screen.getByLabelText('表示')).toHaveValue('originMonth');
     expect(screen.getByLabelText('指標')).toHaveValue('hours');
     window.history.replaceState(null, '', '/');
   });

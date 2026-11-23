@@ -1,4 +1,5 @@
 import { presetPeriod, type Period } from '../lib';
+import { clampView } from '../lib/views';
 import { DEFAULT_OPTIONS, type DashboardOptions, type Summary } from '../model';
 
 /*
@@ -44,11 +45,23 @@ export type DashboardAction =
   | { type: 'selectNone' };
 
 /**
+ * 期間に合わない表示を既定に戻した表示条件を返す。
+ */
+function withClampedView(options: DashboardOptions): DashboardOptions {
+  const result: DashboardOptions = {
+    ...options,
+    view: clampView(options.view, options.from, options.to),
+  };
+  return result;
+}
+
+/**
  * 初期状態を作る。期間は最新1日、項目はすべて選択する。
  */
 export function createInitialState(summary: Summary, initialOptions: Partial<DashboardOptions> = {}): DashboardState {
+  const options = withClampedView({ ...DEFAULT_OPTIONS, ...presetPeriod(summary.days, 1), ...initialOptions });
   const result: DashboardState = {
-    options: { ...DEFAULT_OPTIONS, ...presetPeriod(summary.days, 1), ...initialOptions },
+    options,
     selected: new Set(summary.items),
   };
   return result;
@@ -70,11 +83,11 @@ export function dashboardReducer(state: DashboardState, action: DashboardAction)
   switch (action.type) {
     case 'setOptions':
       // 表示条件の一部を上書きする
-      result = { ...state, options: { ...state.options, ...action.patch } };
+      result = { ...state, options: withClampedView({ ...state.options, ...action.patch }) };
       break;
     case 'setPeriod':
       // 期間を上書きする
-      result = { ...state, options: { ...state.options, ...action.period } };
+      result = { ...state, options: withClampedView({ ...state.options, ...action.period }) };
       break;
     case 'toggleItem': {
       // 元の Set は変えず、コピーしてから変更する

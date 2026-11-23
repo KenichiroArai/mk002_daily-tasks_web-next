@@ -21,6 +21,7 @@ export { buildChartNote, buildChartTitle } from './chartText';
 export { presetPeriod } from './period';
 export { parseQueryOptions } from './queryOptions';
 export type { Period } from './period';
+export { availableViews, clampView, isSingleDayPeriod } from './views';
 export { buildRanking } from './ranking';
 export type { RankingRow } from './ranking';
 export { buildSummaryCards } from './summaryCards';

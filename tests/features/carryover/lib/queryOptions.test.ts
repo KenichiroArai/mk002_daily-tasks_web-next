@@ -6,8 +6,8 @@ describe('parseQueryOptions', () => {
   });
 
   it('すべての表示条件を読み取る', () => {
-    expect(parseQueryOptions('?view=monthly&metric=hours&agg=max&target=checked')).toEqual({
-      view: 'monthly',
+    expect(parseQueryOptions('?view=monthlyItem&metric=hours&agg=max&target=checked')).toEqual({
+      view: 'monthlyItem',
       metric: 'hours',
       agg: 'max',
       target: 'checked',
@@ -15,6 +15,6 @@ describe('parseQueryOptions', () => {
   });
 
   it('想定外の値は無視する', () => {
-    expect(parseQueryOptions('?view=unknown&metric=count')).toEqual({ metric: 'count' });
+    expect(parseQueryOptions('?view=daily&metric=count')).toEqual({ metric: 'count' });
   });
 });

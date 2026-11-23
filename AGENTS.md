@@ -169,7 +169,7 @@ npm run format:check  # Prettier の整形の確認
 
 ## 変更時のチェックリスト
 
-- [ ] `npm run lint` / `npm run typecheck` / `npm test` / `npm run build` が通り、`npm run dev` で表示と切り替えを確認
+- [ ] `npm run lint` / `npm run typecheck` / `npm test` / `npm run build` が通り、`npm run dev` で表示と切り替えを確認（初期は項目ごと・残り時間（分）・最新1日。期間の長さで表示の候補が変わること）
 - [ ] 構成ルール（機能単位の構成、依存の向き、コンポーネントのフォルダ構成）の順守
 - [ ] TypeScript のコーディングルール（戻り値 `result`、読まれない初期代入は書かない、ローカル変数は直前・最小スコープで未使用初期化なし（`result` は先頭）、コンポーネントの `return` は描画だけ）の順守
 - [ ] kb002_daily-tasks_doc の設計書をすべて見直して更新

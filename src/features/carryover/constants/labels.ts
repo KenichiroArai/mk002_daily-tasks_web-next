@@ -5,11 +5,9 @@ import type { Agg, Metric, Target, View } from '../model';
  */
 
 export const VIEW_LABELS: Record<View, string> = {
-  daily: '日別推移（全体）',
-  dailyItem: '日別推移（項目ごと）',
-  monthly: '月ごと（全体）',
-  monthlyItem: '月ごと（項目ごと）',
   item: '項目ごと',
+  dailyItem: '日別推移',
+  monthlyItem: '月ごと',
   originMonth: '持ち越し元の月ごと',
 };
 
@@ -52,8 +50,7 @@ export const UNIT_LABELS: Record<Metric, string> = {
  * 期間のプリセット（0 は全期間、1 は最新1日）
  */
 export const PERIOD_PRESETS = [
-  { days: 1, label: '最新（1日）' },
+  { days: 1, label: '最新1日' },
   { days: 30, label: '直近30日' },
-  { days: 90, label: '直近90日' },
   { days: 0, label: '全期間' },
 ] as const;

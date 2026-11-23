@@ -1,4 +1,10 @@
-import { AGG_LABELS, METRIC_LABELS, TARGET_LABELS, VIEW_LABELS } from '../constants';
+import {
+  AGG_LABELS,
+  METRIC_OPTION_LABELS,
+  TARGET_LABELS,
+  UNIT_LABELS,
+  VIEW_LABELS,
+} from '../constants';
 import { AGG_VIEWS, type DashboardOptions } from '../model';
 
 /**
@@ -7,7 +13,7 @@ import { AGG_VIEWS, type DashboardOptions } from '../model';
 export function buildChartTitle(options: DashboardOptions): string {
   let result: string;
   const aggText = AGG_VIEWS.has(options.view) ? `・${AGG_LABELS[options.agg]}` : '';
-  result = `${VIEW_LABELS[options.view]}：${METRIC_LABELS[options.metric]}${aggText}（${TARGET_LABELS[options.target]}）`;
+  result = `${VIEW_LABELS[options.view]}：${METRIC_OPTION_LABELS[options.metric]}${aggText}（${TARGET_LABELS[options.target]}）`;
   return result;
 }
 
@@ -17,6 +23,8 @@ export function buildChartTitle(options: DashboardOptions): string {
 export function buildChartNote(options: DashboardOptions): string {
   let result: string;
   const notes: string[] = [];
+  notes.push(`単位は${UNIT_LABELS[options.metric]}です。`);
+
   /* 持ち越し元の月ごとか */
   if (options.view === 'originMonth') {
     // 持ち越し元の月ごとの場合
@@ -31,8 +39,15 @@ export function buildChartNote(options: DashboardOptions): string {
   if (aggregatedView && options.view !== 'originMonth') {
     // 集計表示の場合
 
-    // 日ごとの残から計算することを補足する
-    notes.push('集計は日ごとの残をもとに計算します（例: 平均は期間内の 1 日あたりの残）。');
+    // 選択中の集計と、日ごとの残から計算することを補足する
+    notes.push(
+      `集計は${AGG_LABELS[options.agg]}（日ごとの残をもとに計算します。例: 平均は期間内の 1 日あたりの残）。`,
+    );
+  } else if (aggregatedView) {
+    // 持ち越し元の月ごとの集計表示の場合
+
+    // 選択中の集計名を補足する
+    notes.push(`集計は${AGG_LABELS[options.agg]}です。`);
   }
   result = notes.join(' ');
   return result;

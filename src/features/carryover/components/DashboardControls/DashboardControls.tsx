@@ -4,7 +4,8 @@ import { Button, DateRange, Panel, Select, type SelectOption } from '@/shared/co
 
 import { AGG_LABELS, METRIC_OPTION_LABELS, PERIOD_PRESETS, TARGET_LABELS, VIEW_LABELS } from '../../constants';
 import type { Period } from '../../lib';
-import { AGGS, AGG_VIEWS, METRICS, TARGETS, VIEWS, type DashboardOptions } from '../../model';
+import { availableViews } from '../../lib/views';
+import { AGGS, AGG_VIEWS, METRICS, TARGETS, type DashboardOptions } from '../../model';
 import styles from './DashboardControls.module.css';
 
 function toOptions<T extends string>(values: readonly T[], labels: Record<T, string>): SelectOption<T>[] {
@@ -12,7 +13,6 @@ function toOptions<T extends string>(values: readonly T[], labels: Record<T, str
   return result;
 }
 
-const VIEW_OPTIONS = toOptions(VIEWS, VIEW_LABELS);
 const METRIC_OPTIONS = toOptions(METRICS, METRIC_OPTION_LABELS);
 const AGG_OPTIONS = toOptions(AGGS, AGG_LABELS);
 const TARGET_OPTIONS = toOptions(TARGETS, TARGET_LABELS);
@@ -38,10 +38,11 @@ export function DashboardControls({
   onPreset,
 }: DashboardControlsProps) {
   const aggDisabled = !AGG_VIEWS.has(options.view);
+  const viewOptions = toOptions(availableViews(options.from, options.to), VIEW_LABELS);
 
   return (
     <Panel className={styles.controls}>
-      <Select label="表示" value={options.view} options={VIEW_OPTIONS} onChange={(view) => onOptionsChange({ view })} />
+      <Select label="表示" value={options.view} options={viewOptions} onChange={(view) => onOptionsChange({ view })} />
       <Select
         label="指標"
         value={options.metric}
