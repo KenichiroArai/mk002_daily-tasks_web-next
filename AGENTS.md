@@ -9,7 +9,8 @@ Cursor / Codex / Claude Code など複数ツールで共通利用する。
 
 ## プロジェクト概要
 
-- **役割**: 日々のタスク Issue の「持ち越し」の集計（`summary.json`）をグラフと表で表示し、GitHub Pages に公開する静的サイト
+- **役割**: 日々のタスク Issue の「持ち越し」と「先行」の集計をグラフと表で表示し、トップで概要を案内する静的サイトを GitHub Pages に公開する
+- **ルート**: `/`（概要）、`/carryover`（持ち越し）、`/advance`（先行）
 - **関連リポジトリ**（ローカルでは同じフォルダの下に兄弟ディレクトリとして置く）
 
 | リポジトリ                                                                      | 役割                                                                                   |
@@ -20,6 +21,7 @@ Cursor / Codex / Claude Code など複数ツールで共通利用する。
 | [kb002_daily-tasks_doc](https://github.com/KenichiroArai/kb002_daily-tasks_doc) | 設計書と横断的なドキュメント                                                           |
 
 - **データ**: ビルド時に daily-tasks-git の `docs/data/` を `public/data/` にコピーして使う（`scripts/copy-data.mjs`）。コピー元は環境変数 `CARRYOVER_DATA_DIR` で変えられ、未指定なら兄弟の `../daily-tasks-git/docs/data` を使う
+- **SUMMARY のパス**: 持ち越しは `docs/data/summary.json`（`assetPath('/data/summary.json')`）、先行は `docs/data/advance/summary.json`（`assetPath('/data/advance/summary.json')`）。各機能の `index.ts` で `SUMMARY_PATH` として公開する
 - **公開**: daily-tasks-git のワークフロー（`.github/workflows/update-carryover.yml`）が本リポジトリをチェックアウトしてビルドし、`out/` を daily-tasks-git の GitHub Pages に公開する
 
 ## 技術スタック
@@ -37,8 +39,14 @@ scripts/copy-data.mjs        # daily-tasks-git の docs/data を public/data に
 out/                         # 静的エクスポートの出力（Pages に公開。Git で管理しない）
 src/
   app/                       # ルーティング専用（layout.tsx / page.tsx / not-found.tsx）。ロジックを置かない
-  features/
-    carryover/               # 機能ごとのフォルダ
+    page.tsx                 # / 概要
+    carryover/page.tsx       # /carryover
+    advance/page.tsx         # /advance
+  dailyTasks/
+    overview/                # 全体概要
+      index.ts
+      components/
+    carryover/               # 持ち越し
       index.ts               # 機能の公開窓口。機能の外からはここだけを import する
       api/                   # データ取得（fetchSummary など）
       model/                 # 型と zod スキーマ、表示条件の型
@@ -46,6 +54,14 @@ src/
       lib/                   # 純粋関数（集計、グラフ用データの作成など）。関連するものはサブフォルダにまとめてよい（例: summaryCards/）
       hooks/                 # 状態管理やデータ読み込みのフック（フック専用の reducer も置く。外へは公開しない）
       components/            # 機能の画面部品
+    advance/                 # 先行（carryover と同じフォルダ構成）
+      index.ts
+      api/
+      model/
+      constants/
+      lib/
+      hooks/
+      components/
   shared/
     components/ui/           # Panel、Select、Button、Card、DateRange、Swatch などの汎用部品
     components/layout/       # Header、Footer、PageContainer
@@ -55,30 +71,32 @@ src/
   config/site.ts             # サイト名、リポジトリの URL など
   styles/globals.css         # CSS 変数と要素の共通スタイル
 tests/                       # Vitest テスト（src/ をミラー）
-  features/carryover/
+  dailyTasks/overview/
+  dailyTasks/carryover/
     api/                     # 例: fetchSummary.test.ts
     components/              # 例: SummaryCards/SummaryCards.test.tsx
     hooks/
     lib/
     fixtures.ts              # テスト用のデータ
+  dailyTasks/advance/
   shared/
     components/
     hooks/
     lib/
 ```
 
-- 依存の向きは `app` → `features` → `shared` の一方向だけにする。`shared/`・`config/` から `features/` を import しない
-- 機能の内部（`@/features/<機能名>/xxx`）を機能の外から import しない。`@/features/<機能名>` の `index.ts` を経由する。同じ機能の中では相対パスを使う
+- 依存の向きは `app` → `dailyTasks` → `shared` の一方向だけにする。`shared/`・`config/` から `dailyTasks/` を import しない
+- 機能の内部（`@/dailyTasks/<機能名>/xxx`）を機能の外から import しない。`@/dailyTasks/<機能名>` の `index.ts` を経由する。同じ機能の中では相対パスを使う
 - 上の 2 つは `eslint.config.mjs` の `no-restricted-imports` でチェックする（`src/` 向け。`tests/` からは `@/` で対象モジュールを import してよい）
 - 機能の外のファイルは `@/`（`src/` を指す）のパスエイリアスで import する
 - コンポーネントは 1 フォルダにまとめる（`Xxx.tsx`、`Xxx.module.css`、`index.ts`）。スタイルは CSS Modules にし、全体に効くものだけ `styles/globals.css` に置く
-- 計算ロジックは `lib/` の純粋関数にしてコンポーネントから切り離し、Vitest でテストする。コンポーネントは Testing Library でテストする。テストファイルは `tests/` に `src/` と同じ相対パスで `*.test.ts(x)` として置く。フィクスチャは `tests/features/<機能名>/fixtures.ts` に置く
+- 計算ロジックは `lib/` の純粋関数にしてコンポーネントから切り離し、Vitest でテストする。コンポーネントは Testing Library でテストする。テストファイルは `tests/` に `src/` と同じ相対パスで `*.test.ts(x)` として置く。フィクスチャは `tests/dailyTasks/<機能名>/fixtures.ts` に置く
 - 純粋関数の置き場所は使われ方で決める。複数の場所から使う React 非依存の計算は `lib/` に置く。特定のフック専用で外へ公開しないもの（`dashboardReducer` など）は、そのフックと同じ `hooks/` に置き、`hooks/index.ts` では公開しない
-- `summary.json` は `model/` の zod スキーマで実行時に検証し、形式が想定と違う場合は画面にエラーを表示する
+- 各機能の `summary.json`（持ち越し・先行）は `model/` の zod スキーマで実行時に検証し、形式が想定と違う場合は画面にエラーを表示する
 - データ（daily-tasks-git の `docs/data/`）を変更する処理は Java 側（gr002_daily-tasks）だけで行い、画面は読み取りだけにする
 - 静的エクスポートのため、サーバー機能（API Routes、`cookies()` などの動的機能、画像最適化）は使わない
 - `public/` のファイルを参照するときは `assetPath()` で basePath（Pages では `/daily-tasks-git`）を付ける
-- 新しい画面は `features/<機能名>/` を同じ構成で作り、`app/<ルート>/page.tsx` から呼び出す
+- 新しい画面は `dailyTasks/<機能名>/` を `carryover` と同じ構成で作り、`app/<ルート>/page.tsx` から呼び出す
 - `node_modules/`、`.next/`、`out/`、`public/data/`（`docs/data/` のコピー）は Git で管理しない
 
 ## 設計書
@@ -169,15 +187,15 @@ npm run format:check  # Prettier の整形の確認
 
 ## 変更時のチェックリスト
 
-- [ ] `npm run lint` / `npm run typecheck` / `npm test` / `npm run build` が通り、`npm run dev` で表示と切り替えを確認（初期は項目ごと・残り時間（分）・最新1日。期間の長さで表示の候補が変わること）
-- [ ] 構成ルール（機能単位の構成、依存の向き、コンポーネントのフォルダ構成）の順守
+- [ ] `npm run lint` / `npm run typecheck` / `npm test` / `npm run build` が通り、`/`・`/carryover`・`/advance` の表示を確認
+- [ ] 構成ルール（`dailyTasks/` 単位、依存の向き、コンポーネントのフォルダ構成）の順守
 - [ ] TypeScript のコーディングルール（戻り値 `result`、読まれない初期代入は書かない、ローカル変数は直前・最小スコープで未使用初期化なし（`result` は先頭）、コンポーネントの `return` は描画だけ）の順守
 - [ ] kb002_daily-tasks_doc の設計書をすべて見直して更新
 - [ ] README の更新
 
 ## やってはいけないこと
 
-- `shared/` から `features/` に依存したり、機能の内部を機能の外から直接 import したりすること
+- `shared/` から `dailyTasks/` に依存したり、機能の内部を機能の外から直接 import したりすること
 - `docs/data/` の JSON を画面から変更すること（読み取りだけにする）
 - サーバー機能（API Routes、動的機能、画像最適化）を使うこと
 - コンポーネントの `return` の中で値の計算（`lib/` の関数の呼び出し、書式化など）を行うこと

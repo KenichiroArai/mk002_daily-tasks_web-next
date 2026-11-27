@@ -1,0 +1,212 @@
+import { formatNumber, roundTo } from '@/shared/lib';
+
+import { PALETTE, UNIT_LABELS } from '../constants';
+import type { Agg, Day, Metric, Stat, Target } from '../model';
+
+/**
+ * 月（YYYY-MM）ごとの日別データ。
+ * 月で引く対応の名前。中身は Map のままにする。
+ */
+export type DaysByMonth = Map<string, Day[]>;
+
+/**
+ * 項目名と色の対応。
+ * 項目名は可変なので Record のままにする。
+ */
+export type ItemColors = Record<string, string>;
+
+/**
+ * 全体値とチェック済み値から、対象に応じた値を返す。
+ */
+function valueByTarget(total: number, checked: number, target: Target): number {
+  let result = 0;
+
+  /* 対象がチェック済みか */
+  if (target === 'checked') {
+    // チェック済みの場合
+
+    // チェック済みの値にする
+    result = checked;
+  } else if (target === 'unchecked') {
+    // 未チェックの場合
+
+    // 未チェックの値にする
+    result = total - checked;
+  } else {
+    // すべての場合
+
+    // 全体の値にする
+    result = total;
+  }
+  return result;
+}
+
+/**
+ * 集計値から、指標と対象に応じた値を取り出す。
+ */
+export function statValue(stat: Stat | undefined, metric: Metric, target: Target): number {
+  let result = 0;
+
+  /* 集計値がないか */
+  if (!stat) {
+    // 集計値がない場合
+
+    // 初期値を返す
+    return result;
+  }
+  switch (metric) {
+    case 'count':
+      result = valueByTarget(stat.count, stat.checkedCount, target);
+      break;
+    case 'minutes':
+      result = valueByTarget(stat.minutes, stat.checkedMinutes, target);
+      break;
+    case 'hours':
+      result = valueByTarget(stat.minutes, stat.checkedMinutes, target) / 60;
+      break;
+  }
+  return result;
+}
+
+/**
+ * ある日の、ある項目の値
+ */
+export function dayItemValue(day: Day, item: string, metric: Metric, target: Target): number {
+  const result = statValue(day.byItem[item], metric, target);
+  return result;
+}
+
+/**
+ * ある日の、選択した項目の合計値
+ */
+export function dayTotal(day: Day, items: Iterable<string>, metric: Metric, target: Target): number {
+  let result = 0;
+  for (const item of items) {
+    result += dayItemValue(day, item, metric, target);
+  }
+  return result;
+}
+
+/**
+ * 値の一覧を集計する。空の場合は 0 を返す。
+ */
+export function aggregate(values: readonly number[], agg: Agg): number {
+  let result = 0;
+
+  /* 値が空か */
+  if (values.length === 0) {
+    // 値が空の場合
+
+    // 初期値を返す
+    return result;
+  }
+  switch (agg) {
+    case 'sum':
+      result = values.reduce((a, b) => a + b, 0);
+      break;
+    case 'max':
+      result = Math.max(...values);
+      break;
+    case 'min':
+      result = Math.min(...values);
+      break;
+    case 'last':
+      result = values[values.length - 1] ?? 0;
+      break;
+    default:
+      result = values.reduce((a, b) => a + b, 0) / values.length;
+      break;
+  }
+  return result;
+}
+
+/**
+ * グラフや表に出す値の丸め（時間は小数 2 桁、それ以外は 1 桁）
+ */
+export function roundMetric(value: number, metric: Metric): number {
+  const result = roundTo(value, metric === 'hours' ? 2 : 1);
+  return result;
+}
+
+/**
+ * 指標に応じた表示用の書式化（分は整数、それ以外は小数 1 桁）
+ */
+export function formatMetric(value: number, metric: Metric): string {
+  const result = formatNumber(value, metric === 'minutes' ? 0 : 1);
+  return result;
+}
+
+/**
+ * 丸めと書式化をまとめて行い、単位を付ける。
+ */
+export function formatMetricWithUnit(value: number, metric: Metric): string {
+  const result = `${formatMetric(roundMetric(value, metric), metric)} ${UNIT_LABELS[metric]}`;
+  return result;
+}
+
+/**
+ * 日別のデータを月（YYYY-MM）ごとにまとめる。
+ */
+export function groupByMonth(days: readonly Day[]): DaysByMonth {
+  // 月（YYYY-MM）で引く関数内の一時集計。戻り値の型が名前を持つ。
+  const result: DaysByMonth = new Map<string, Day[]>();
+  for (const day of days) {
+    const key = day.date.slice(0, 7);
+    const list = result.get(key);
+
+    /* 同じ月の一覧があるか */
+    if (list) {
+      // 同じ月の一覧がある場合
+
+      // その月の一覧へ追加する
+      list.push(day);
+    } else {
+      // 同じ月の一覧がない場合
+
+      // その月の一覧を作る
+      result.set(key, [day]);
+    }
+  }
+  return result;
+}
+
+/**
+ * 期間（YYYY-MM-DD、両端を含む）で絞り込む。空文字は制限なしとする。
+ */
+export function filterDays(days: readonly Day[], from: string, to: string): Day[] {
+  const result = days.filter((day) => (!from || day.date >= from) && (!to || day.date <= to));
+  return result;
+}
+
+/**
+ * 項目の並び順に色を割り当てる。
+ */
+export function assignColors(items: readonly string[]): ItemColors {
+  // 項目名は可変なので Record のままにする。
+  const result: ItemColors = {};
+  items.forEach((item, index) => {
+    result[item] = PALETTE[index % PALETTE.length] ?? PALETTE[0];
+  });
+  return result;
+}
+
+/**
+ * 項目の元の並び順を保ったまま、選択した項目だけを返す。
+ */
+export function orderSelectedItems(items: readonly string[], selected: ReadonlySet<string>): string[] {
+  const result = items.filter((item) => selected.has(item));
+  return result;
+}
+
+/**
+ * 期間内で、指標と対象の値が 1 日でも正の項目だけを返す（元の並び順を保つ）。
+ */
+export function itemsWithValueInPeriod(
+  days: readonly Day[],
+  items: readonly string[],
+  metric: Metric,
+  target: Target,
+): string[] {
+  const result = items.filter((item) => days.some((day) => dayItemValue(day, item, metric, target) > 0));
+  return result;
+}

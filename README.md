@@ -1,9 +1,12 @@
 # mk002_daily-tasks_web-next
 
-日々のタスク（GitHub Issue、1 日 1 Issue）の「持ち越し」の集計をグラフで表示する画面（Next.js + TypeScript + Recharts）です。
+日々のタスク（GitHub Issue、1 日 1 Issue）の「持ち越し」と「先行」の集計をグラフで表示する画面（Next.js + TypeScript + Recharts）です。
 静的エクスポートした画面は [daily-tasks-git](https://github.com/KenichiroArai/daily-tasks-git) の GitHub Pages に公開しています。
 
 - 公開ページ: <https://kenichiroarai.github.io/daily-tasks-git/>
+- `/` … 持ち越し・先行の概要
+- `/carryover` … 持ち越しの推移（`summary.json`）
+- `/advance` … 先行の推移（`advance/summary.json`）
 
 ## 関連リポジトリ
 

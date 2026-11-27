@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 import { siteConfig } from '@/config/site';
-import { SUMMARY_PATH } from '@/features/carryover';
+import { SUMMARY_PATH as ADVANCE_SUMMARY_PATH } from '@/dailyTasks/advance';
+import { SUMMARY_PATH as CARRYOVER_SUMMARY_PATH } from '@/dailyTasks/carryover';
 import { Footer, Header, PageContainer, type FooterLink } from '@/shared/components/layout';
 import { assetPath } from '@/shared/lib';
 
@@ -16,7 +17,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const footerLinks: FooterLink[] = [
     { label: `${siteConfig.repositoryName} の Issue`, href: siteConfig.issuesUrl },
-    { label: 'summary.json', href: assetPath(SUMMARY_PATH) },
+    { label: '持ち越し summary.json', href: assetPath(CARRYOVER_SUMMARY_PATH) },
+    { label: '先行 summary.json', href: assetPath(ADVANCE_SUMMARY_PATH) },
   ];
 
   return (

@@ -1,5 +1,5 @@
-import { CarryoverDashboard } from '@/features/carryover';
+import { OverviewDashboard } from '@/dailyTasks/overview';
 
 export default function HomePage() {
-  return <CarryoverDashboard />;
+  return <OverviewDashboard />;
 }
